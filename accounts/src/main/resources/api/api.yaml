@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Account Service
+  description: API for managing user accounts, authentication, and authorization.
+servers:
+  - url: 'http:/localhost:8080/api'
+paths:
+  /register:
+    post:
+      tags:
+        - Registration
+      summary: Create a new user account
+      operationId: register
+      responses:
+        "201":
+          description: Successful Registration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegistrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/UserCredentials"
+          in: query
+          name: User Credentials
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Authenticate a user
+      operationId: login
+      responses:
+        "200":
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/UserCredentials"
+          in: query
+          name: User Credentials
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        password:
+          type: string
+    UserCredentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    RegistrationResponse:
+      type: object
+    ErrorDto:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
