@@ -18,7 +18,7 @@ spring:
     show-sql: true
 
   liquibase:
-    enabled: true
+    enabled: false
     change-log: db/changelog/changelog-master.xml
     default-schema: vw_accounts
 

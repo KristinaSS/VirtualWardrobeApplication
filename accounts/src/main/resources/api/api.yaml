@@ -6,20 +6,24 @@ info:
 servers:
   - url: 'http:/localhost:8080/api'
 paths:
-  /register:
-    post:
+  /user/all:
+    get:
       tags:
-        - Registration
-      summary: Create a new user account
-      operationId: register
+        - Account
+      summary: Getting all users
+      operationId: getAllUsers
       responses:
         "201":
-          description: Successful Registration
+          description: Successful retrieval of all users.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegistrationResponse"
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+
         "400":
+
           description: Bad Request
           content:
             application/json:
@@ -43,24 +47,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-      parameters:
-        - schema:
-            $ref: "#/components/schemas/UserCredentials"
-          in: query
-          name: User Credentials
-  /login:
-    post:
+  /user/{id}:
+    get:
       tags:
-        - Login
-      summary: Authenticate a user
-      operationId: login
+        - Account
+      summary: Getting single user by id
+      operationId: getUserById
       responses:
-        "200":
-          description: Successful authentication
+        "201":
+          description: Successful retrieval of user.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthResponse"
+                $ref: '#/components/schemas/UserDTO'
+
         "400":
           description: Bad Request
           content:
@@ -87,20 +87,93 @@ paths:
                 $ref: "#/components/schemas/ErrorDto"
       parameters:
         - schema:
-            $ref: "#/components/schemas/UserCredentials"
+            type: string
           in: query
-          name: User Credentials
+          name: User Id
+
+  /user/{email}:
+    get:
+      tags:
+        - Account
+      summary: Getting single user by email
+      operationId: getUserById
+      responses:
+        "201":
+          description: Successful retrieval of user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: User email
+  /user/{id}/update:
+    get:
+      tags:
+        - Account
+      summary: Update user
+      operationId: updateUser
+      responses:
+        "201":
+          description: Successful update of user.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            $ref: '#/components/schemas/UserDTO'
+          in: query
+          name: Updated user
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-        username:
-          type: string
-        password:
-          type: string
     UserCredentials:
       type: object
       properties:
@@ -108,13 +181,6 @@ components:
           type: string
         password:
           type: string
-    AuthResponse:
-      type: object
-      properties:
-        token:
-          type: string
-    RegistrationResponse:
-      type: object
     ErrorDto:
       title: Error
       type: object
@@ -122,4 +188,17 @@ components:
         code:
           type: string
         message:
+          type: string
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        accountType:
           type: string
