@@ -18,10 +18,14 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<UserDTO> getUserById_0(String userEmail) {
+    public ResponseEntity<String> getUserRightsById(String userId) {
         return null;
     }
 
+    @Override
+    public ResponseEntity<UserDTO> getUserByEmail(String userEmail) {
+        return null;
+    }
     @Override
     public ResponseEntity<Void> updateUser(UserDTO updatedUser) {
         return null;

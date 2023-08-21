@@ -90,13 +90,58 @@ paths:
             type: string
           in: query
           name: User Id
+  /user/{id}/rights:
+    get:
+      tags:
+        - Account
+      summary: Getting single user's rights by id
+      operationId: getUserRightsById
+      responses:
+        "201":
+          description: Successful retrieval of user rights.
+          content:
+            application/json:
+              schema:
+                type: string
+                enum:
+                  - ADMIN
+                  - USER
 
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "409":
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "502":
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: User Id
   /user/{email}:
     get:
       tags:
         - Account
       summary: Getting single user by email
-      operationId: getUserById
+      operationId: getUserByEmail
       responses:
         "201":
           description: Successful retrieval of user.
