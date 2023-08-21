@@ -3,31 +3,34 @@ package com.vitualwardrobe.accounts.controllers;
 import org.openapitools.api.AccountApi;
 import org.openapitools.model.UserDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RestController
 public class AccountController implements AccountApi {
     @Override
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return null;
+        return ResponseEntity.ok(null);
     }
 
     @Override
     public ResponseEntity<UserDTO> getUserById(String userId) {
-        return null;
+        return ResponseEntity.ok(null);
     }
 
     @Override
     public ResponseEntity<String> getUserRightsById(String userId) {
-        return null;
+        return ResponseEntity.ok(null);
     }
 
     @Override
     public ResponseEntity<UserDTO> getUserByEmail(String userEmail) {
-        return null;
+        return ResponseEntity.ok(null);
     }
     @Override
     public ResponseEntity<Void> updateUser(UserDTO updatedUser) {
-        return null;
+        return ResponseEntity.ok(null);
+
     }
 }

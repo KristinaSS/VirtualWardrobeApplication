@@ -1,4 +1,4 @@
-package com.vitualwardrobe.accounts.constants;
+package com.vitualwardrobe.accounts.service;
 
 import org.springframework.stereotype.Service;
 
