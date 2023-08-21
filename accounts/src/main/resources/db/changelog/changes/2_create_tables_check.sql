@@ -9,4 +9,5 @@ CREATE TABLE IF NOT EXISTS `vw_accounts`.`account` (
                                                             `email` VARCHAR(100) NOT NULL,
                                                             `password` VARCHAR(45) NOT NULL,
                                                             `account_type` VARCHAR(10) NOT NULL,
+                                                            `is_active` TINYINT NOT NULL,
                                                             PRIMARY KEY (`id`));

@@ -1,5 +1,6 @@
 package com.vitualwardrobe.accounts.service.implementations;
 
+import com.vitualwardrobe.accounts.exceptions.EmailUnavailableException;
 import com.vitualwardrobe.accounts.exceptions.UserNotFoundException;
 import com.vitualwardrobe.accounts.models.Account;
 import com.vitualwardrobe.accounts.repository.AccountRepository;
@@ -7,6 +8,7 @@ import com.vitualwardrobe.accounts.service.AccountService;
 import org.openapitools.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,24 +26,23 @@ public class AccountServiceImp implements AccountService {
     }
 
     @Override
-    public UserDTO getUserByID(String userId) {
-        return ACCOUNT_MAPPER.mapToDTO(accountRepository.findById(Integer
-                        .getInteger(userId))
-                        .orElseThrow(() -> new UserNotFoundException(String.format("No user found with id: %s", userId))
-                        ));
+    public UserDTO getUserByID(BigDecimal userId) {
+        return ACCOUNT_MAPPER.mapToDTO(accountRepository.findById(userId.intValue())
+                        .orElseThrow(() -> new UserNotFoundException("id", ""+userId.intValue()))
+                        );
     }
 
     @Override
     public UserDTO getUserByEmail(String userEmail) {
         UserDTO user = ACCOUNT_MAPPER.mapToDTO(accountRepository.findAccountByEmail(userEmail));
         if(user == null){
-            throw new UserNotFoundException(String.format("No user found with email: %s", userEmail));
+            throw new UserNotFoundException("email", userEmail);
         }
         return user;
     }
 
     @Override
-    public String getUserRightsById(String userId) {
+    public String getUserRightsById(BigDecimal userId) {
         return this.getUserByID(userId).getAccountType().getValue();
     }
 
@@ -49,10 +50,22 @@ public class AccountServiceImp implements AccountService {
     public void updateUser(UserDTO updatedUser) {
         Account account = ACCOUNT_MAPPER.mapToModel(updatedUser);
 
-        accountRepository.findById(updatedUser
+        //check if account exists
+        Account oldAccount = accountRepository.findById(updatedUser
                 .getId())
-                .orElseThrow(() -> new UserNotFoundException(String.format("No user found with id: %s", updatedUser.getId())));
+                .orElseThrow(() -> new UserNotFoundException("id", ""+updatedUser.getId()));
+
+        //check if email available
+        if(validateNewEmail(updatedUser.getEmail())){
+            throw new EmailUnavailableException(updatedUser.getEmail());
+        }
 
         accountRepository.save(account);
     }
+
+    private boolean validateNewEmail(String newEmail) {
+        return accountRepository.findAccountByEmail(newEmail) == null;
+    }
+
+
 }

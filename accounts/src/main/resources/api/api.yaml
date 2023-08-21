@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: Account Service
-  description: API for managing user accounts, authentication, and authorization.
+  description: API for managing user accounts.
 servers:
   - url: 'http:/localhost:8080/api'
 paths:
@@ -23,7 +23,6 @@ paths:
                   $ref: '#/components/schemas/UserDTO'
 
         "400":
-
           description: Bad Request
           content:
             application/json:
@@ -35,14 +34,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "502":
-          description: Bad Gateway
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -73,23 +66,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "502":
-          description: Bad Gateway
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
       parameters:
         - schema:
-            type: string
+            type: number
+            minimum: 1
           in: query
           name: User Id
+          required: true
+          description: The account id
+
   /user/{id}/rights:
     get:
       tags:
@@ -119,23 +110,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "502":
-          description: Bad Gateway
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
       parameters:
         - schema:
-            type: string
+            type: number
+            minimum: 1
           in: query
           name: User Id
+          required: true
+          description: The account id
+  /user/{id}/delete:
+    get:
+      tags:
+        - Account
+      summary: Deleting single user by id
+      operationId: deleteUser
+      responses:
+        "201":
+          description: Successful deletion of user.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            type: number
+            minimum: 1
+          in: query
+          name: User Id
+          required: true
+          description: The account id
   /user/{email}:
     get:
       tags:
@@ -162,14 +185,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "502":
-          description: Bad Gateway
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -179,7 +196,9 @@ paths:
             type: string
           in: query
           name: User email
-  /user/{id}/update:
+          required: true
+          description: Unique account email
+  /user/update:
     get:
       tags:
         - Account
@@ -200,14 +219,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDto"
-        "409":
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorDto"
-        "502":
-          description: Bad Gateway
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
@@ -217,6 +230,45 @@ paths:
             $ref: '#/components/schemas/UserDTO'
           in: query
           name: Updated user
+          required: true
+  /user/create:
+    get:
+      tags:
+        - Account
+      summary: Create user
+      operationId: createUser
+      responses:
+        "201":
+          description: Successful creation of user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDto"
+      parameters:
+        - schema:
+            $ref: '#/components/schemas/UserDTO'
+          in: query
+          name: New user
+          required: true
+
 components:
   schemas:
     ErrorDto:
