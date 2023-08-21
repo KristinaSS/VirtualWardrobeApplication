@@ -1,5 +1,6 @@
 package com.vitualwardrobe.accounts.service.implementations;
 
+import com.vitualwardrobe.accounts.exceptions.AccountAlreadyActiveException;
 import com.vitualwardrobe.accounts.exceptions.EmailUnavailableException;
 import com.vitualwardrobe.accounts.exceptions.UserNotFoundException;
 import com.vitualwardrobe.accounts.models.Account;
@@ -53,26 +54,41 @@ public class AccountServiceImp implements AccountService {
         Account account = ACCOUNT_MAPPER.mapToModel(updatedUser);
 
         //check if account exists
-        Account oldAccount = accountRepository.findById(updatedUser
+        String oldEmail = accountRepository.findById(updatedUser
                 .getId())
-                .orElseThrow(() -> new UserNotFoundException("id", ""+updatedUser.getId()));
+                .orElseThrow(() -> new UserNotFoundException("id", ""+updatedUser.getId())).getEmail();
+        String newEmail = updatedUser.getEmail();
 
         //check if email available
-        if(validateNewEmail(updatedUser.getEmail())){
-            throw new EmailUnavailableException(updatedUser.getEmail());
+        if(!oldEmail.equals(newEmail) && validateNewEmail(newEmail)){
+            throw new EmailUnavailableException(newEmail);
         }
 
         accountRepository.save(account);
     }
 
     @Override
-    public UserDTO createUser(UserDTO updatedUser) {
-        return null;
+    public void createUser(UserDTO createdUser) {
+        if(validateNewEmail(createdUser.getEmail())){
+            throw new EmailUnavailableException(createdUser.getEmail());
+        }
+        Account account = ACCOUNT_MAPPER.mapToModel(createdUser);
+        accountRepository.save(account);
     }
 
     @Override
-    public void deleteUser(BigDecimal user) {
+    public void deleteUser(BigDecimal userId) {
+        //check if account exists
+        Account account = accountRepository.findById(userId.intValue())
+                .orElseThrow(() -> new UserNotFoundException("id", ""+userId.intValue()));
 
+        //validate account already not active
+        if(account.isActive()){
+            account.setActive(false);
+            accountRepository.save(account);
+        }else {
+            throw new AccountAlreadyActiveException(userId.intValue());
+        }
     }
 
     private boolean validateNewEmail(String newEmail) {

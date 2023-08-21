@@ -43,4 +43,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         .message(ex.getMessage())
                         .build());
     }
+
+    @ExceptionHandler(value = {AccountAlreadyActiveException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDto> handleConflict(AccountAlreadyActiveException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorDto.builder()
+                        .code(HttpStatus.BAD_REQUEST.toString())
+                        .message(ex.getMessage())
+                        .build());
+    }
 }

@@ -18,7 +18,7 @@ public interface AccountService {
 
     void updateUser(UserDTO updatedUser);
 
-    UserDTO createUser (UserDTO updatedUser);
+    void createUser (UserDTO createdUser);
 
-    void deleteUser (BigDecimal user);
+    void deleteUser (BigDecimal userId);
 }

@@ -17,7 +17,8 @@ public class AccountController implements AccountApi {
 
     @Override
     public ResponseEntity<UserDTO> createUser(UserDTO newUser) {
-        return ResponseEntity.ok(accountService.createUser(newUser));
+        accountService.createUser(newUser);
+        return ResponseEntity.ok(null);
     }
 
     @Override
