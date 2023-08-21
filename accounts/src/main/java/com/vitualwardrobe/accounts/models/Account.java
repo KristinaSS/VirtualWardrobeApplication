@@ -2,7 +2,15 @@ package com.vitualwardrobe.accounts.models;
 
 import com.vitualwardrobe.accounts.constants.AccountType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "account")
 public class Account {
     @Id
