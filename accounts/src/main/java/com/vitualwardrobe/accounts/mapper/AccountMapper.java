@@ -8,7 +8,7 @@ import org.openapitools.model.UserDTO;
 
 @Mapper
 public interface AccountMapper {
-    AccountMapper MAPPER = Mappers.getMapper(AccountMapper.class);
+    AccountMapper ACCOUNT_MAPPER = Mappers.getMapper(AccountMapper.class);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")

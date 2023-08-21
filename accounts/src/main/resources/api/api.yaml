@@ -219,13 +219,6 @@ paths:
           name: Updated user
 components:
   schemas:
-    UserCredentials:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
     ErrorDto:
       title: Error
       type: object
