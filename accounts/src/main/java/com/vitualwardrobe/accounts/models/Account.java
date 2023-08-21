@@ -31,6 +31,10 @@ public class Account {
     private String password;
 
     @Basic
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @Basic
     @Column(name = "account_type")
     private AccountType accountType;
 }

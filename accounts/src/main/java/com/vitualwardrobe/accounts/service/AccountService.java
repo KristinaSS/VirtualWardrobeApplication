@@ -1,6 +1,5 @@
 package com.vitualwardrobe.accounts.service;
 
-import com.vitualwardrobe.accounts.exceptions.UserNotFoundException;
 import org.openapitools.model.UserDTO;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +17,8 @@ public interface AccountService {
     String getUserRightsById(BigDecimal userId);
 
     void updateUser(UserDTO updatedUser);
+
+    UserDTO createUser (UserDTO updatedUser);
+
+    void deleteUser (BigDecimal user);
 }

@@ -17,11 +17,12 @@ public class AccountController implements AccountApi {
 
     @Override
     public ResponseEntity<UserDTO> createUser(UserDTO newUser) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(accountService.createUser(newUser));
     }
 
     @Override
     public ResponseEntity<Void> deleteUser(BigDecimal userId) {
+        accountService.deleteUser(userId);
         return ResponseEntity.ok(null);
     }
 

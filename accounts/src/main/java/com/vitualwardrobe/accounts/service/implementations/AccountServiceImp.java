@@ -7,6 +7,7 @@ import com.vitualwardrobe.accounts.repository.AccountRepository;
 import com.vitualwardrobe.accounts.service.AccountService;
 import org.openapitools.model.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static com.vitualwardrobe.accounts.mapper.AccountMapper.ACCOUNT_MAPPER;
 
+@Service
 public class AccountServiceImp implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
@@ -61,6 +63,16 @@ public class AccountServiceImp implements AccountService {
         }
 
         accountRepository.save(account);
+    }
+
+    @Override
+    public UserDTO createUser(UserDTO updatedUser) {
+        return null;
+    }
+
+    @Override
+    public void deleteUser(BigDecimal user) {
+
     }
 
     private boolean validateNewEmail(String newEmail) {
